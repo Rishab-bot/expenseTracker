@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import '../App.css';
 
 export function BalanceDisplay({ balance, updateBalance }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
