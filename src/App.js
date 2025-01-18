@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import WalletBalance from './WalletBalance';
 import AddIncomeModal from './AddIncomeModal';
 import ExpenseList from './ExpenseList';
 import AddExpenseModal from './AddExpenseModal';
 import { loadExpensesFromLocalStorage } from './LocalStorage';
+import { Button, Card, Typography, Box, Container } from '@mui/material';
+import { styled } from '@mui/system';
 
 const App = () => {
   const [walletBalance, setWalletBalance] = useState(5000); // Initial wallet balance
@@ -11,52 +13,57 @@ const App = () => {
   const [isAddIncomeOpen, setIsAddIncomeOpen] = useState(false);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
 
-  // Calculate the total expenses dynamically
   const totalExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
 
-  // Update balance after adding income
   const addIncome = (amount) => {
-    setWalletBalance(prevBalance => prevBalance + Number(amount));
+    setWalletBalance((prevBalance) => prevBalance + Number(amount));
   };
 
-  // Update expenses after adding or deleting expense
   const addExpense = (expense) => {
     const updatedExpenses = [...expenses, expense];
     setExpenses(updatedExpenses);
     localStorage.setItem('expenses', JSON.stringify(updatedExpenses));
-    setWalletBalance(prevBalance => prevBalance - expense.amount); // Deduct from wallet balance
+    setWalletBalance((prevBalance) => prevBalance - expense.amount);
   };
 
   const deleteExpense = (expenseId) => {
     const updatedExpenses = expenses.filter(expense => expense.id !== expenseId);
     setExpenses(updatedExpenses);
     localStorage.setItem('expenses', JSON.stringify(updatedExpenses));
-    // Update wallet balance after deletion
     const expenseToDelete = expenses.find(expense => expense.id === expenseId);
-    setWalletBalance(prevBalance => prevBalance + expenseToDelete.amount);
+    setWalletBalance((prevBalance) => prevBalance + expenseToDelete.amount);
   };
 
   return (
-    <div className="App">
-      <h1>Expense Tracker</h1>
-      
-      <div className="card">
-        <WalletBalance balance={walletBalance} />
-      </div>
-      
-      <div className="card">
-        <h2>Expenses</h2>
-        <p>Total Expenses: ${totalExpenses.toFixed(2)}</p>
-      </div>
+    <Container>
+      <Box sx={{ textAlign: 'center', margin: '20px 0', background: '#f8f9fa', padding: '20px', borderRadius: '10px' }}>
+        <Typography variant="h3" color="primary" gutterBottom>
+          Expense Tracker
+        </Typography>
+        
+        <Card sx={{ marginBottom: '20px', padding: '20px', background: '#e0f7fa', borderRadius: '12px' }}>
+          <WalletBalance balance={walletBalance} />
+        </Card>
+        
+        <Card sx={{ marginBottom: '20px', padding: '20px', background: '#e3f2fd', borderRadius: '12px' }}>
+          <Typography variant="h6" color="secondary">Total Expenses: ${totalExpenses.toFixed(2)}</Typography>
+        </Card>
 
-      <button onClick={() => setIsAddIncomeOpen(true)}>+ Add Income</button>
-      <button onClick={() => setIsAddExpenseOpen(true)}>+ Add Expense</button>
-
-      <ExpenseList expenses={expenses} deleteExpense={deleteExpense} />
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <Button variant="contained" color="success" onClick={() => setIsAddIncomeOpen(true)}>
+            + Add Income
+          </Button>
+          <Button variant="contained" color="error" onClick={() => setIsAddExpenseOpen(true)}>
+            + Add Expense
+          </Button>
+        </Box>
+        
+        <ExpenseList expenses={expenses} deleteExpense={deleteExpense} />
+      </Box>
 
       {isAddIncomeOpen && <AddIncomeModal onClose={() => setIsAddIncomeOpen(false)} onAddIncome={addIncome} />}
       {isAddExpenseOpen && <AddExpenseModal onClose={() => setIsAddExpenseOpen(false)} onAddExpense={addExpense} />}
-    </div>
+    </Container>
   );
 };
 

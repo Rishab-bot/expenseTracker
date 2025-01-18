@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 
 const AddExpenseModal = ({ onClose, onAddExpense }) => {
   const [title, setTitle] = useState('');
@@ -14,7 +15,7 @@ const AddExpenseModal = ({ onClose, onAddExpense }) => {
         title,
         amount: parseFloat(price),
         category,
-        date
+        date,
       };
       onAddExpense(newExpense);
       onClose();
@@ -22,38 +23,67 @@ const AddExpenseModal = ({ onClose, onAddExpense }) => {
   };
 
   return (
-    <div className="modal">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Expense Title"
+    <Dialog open onClose={onClose}>
+      <DialogTitle>Add Expense</DialogTitle>
+      <DialogContent>
+        <TextField
+          label="Expense Title"
+          variant="outlined"
+          fullWidth
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          sx={{
+            marginBottom: '20px',
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '12px',
+              background: '#fafafa',
+            }
+          }}
         />
-        <input
+        <TextField
+          label="Price"
           type="number"
-          name="price"
-          placeholder="Price"
+          variant="outlined"
+          fullWidth
           value={price}
           onChange={(e) => setPrice(e.target.value)}
+          sx={{
+            marginBottom: '20px',
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '12px',
+              background: '#fafafa',
+            }
+          }}
         />
-        <select name="category" value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="">Select Category</option>
-          <option value="Food">Food</option>
-          <option value="Travel">Travel</option>
-          <option value="Entertainment">Entertainment</option>
-        </select>
-        <input
+        <FormControl fullWidth sx={{ marginBottom: '20px' }}>
+          <InputLabel>Category</InputLabel>
+          <Select value={category} onChange={(e) => setCategory(e.target.value)} sx={{ borderRadius: '12px' }}>
+            <MenuItem value="Food">Food</MenuItem>
+            <MenuItem value="Travel">Travel</MenuItem>
+            <MenuItem value="Entertainment">Entertainment</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          label="Date"
           type="date"
-          name="date"
+          variant="outlined"
+          fullWidth
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          sx={{
+            marginBottom: '20px',
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '12px',
+              background: '#fafafa',
+            }
+          }}
         />
-        <button type="submit">Add Expense</button>
-      </form>
-      <button onClick={onClose}>Close</button>
-    </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="secondary">Cancel</Button>
+        <Button onClick={handleSubmit} color="primary">Add Expense</Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
