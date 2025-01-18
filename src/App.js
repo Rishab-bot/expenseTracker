@@ -11,6 +11,9 @@ const App = () => {
   const [isAddIncomeOpen, setIsAddIncomeOpen] = useState(false);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
 
+  // Calculate the total expenses dynamically
+  const totalExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
+
   // Update balance after adding income
   const addIncome = (amount) => {
     setWalletBalance(prevBalance => prevBalance + Number(amount));
@@ -36,7 +39,16 @@ const App = () => {
   return (
     <div className="App">
       <h1>Expense Tracker</h1>
-      <WalletBalance balance={walletBalance} />
+      
+      <div className="card">
+        <WalletBalance balance={walletBalance} />
+      </div>
+      
+      <div className="card">
+        <h2>Expenses</h2>
+        <p>Total Expenses: ${totalExpenses.toFixed(2)}</p>
+      </div>
+
       <button onClick={() => setIsAddIncomeOpen(true)}>+ Add Income</button>
       <button onClick={() => setIsAddExpenseOpen(true)}>+ Add Expense</button>
 
