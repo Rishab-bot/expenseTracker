@@ -1,18 +1,16 @@
-import React from 'react';
+import TransactionItem from './TransactionItem';
 
-function ExpenseList({ expenses }) {
+const ExpenseList = ({ expenses, deleteExpense }) => {
   return (
     <div>
-      <h3>Expense List</h3>
+      <h2>Transactions</h2>
       <ul>
-        {expenses.map((expense, index) => (
-          <li key={index}>
-            {expense.title} - ${expense.price} - {expense.category} - {expense.date}
-          </li>
+        {expenses.map(expense => (
+          <TransactionItem key={expense.id} expense={expense} deleteExpense={deleteExpense} />
         ))}
       </ul>
     </div>
   );
-}
+};
 
 export default ExpenseList;
